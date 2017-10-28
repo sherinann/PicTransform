@@ -20,6 +20,9 @@ public class Interface1 extends JFrame implements ActionListener  {
     private BufferedImage im;
     private JFrame  frame2;
     private JLabel jb;
+    private JButton Nega;
+    private JButton Gray;
+    private BufferedImage imNew;
 
     private Interface1() {
         frame1 = new JFrame();
@@ -27,18 +30,29 @@ public class Interface1 extends JFrame implements ActionListener  {
         frame1.setLayout(new FlowLayout());
         frame1.setSize(400, 400);
 
-        Pic= new JButton("Load Pic");
-        Pic.addActionListener(this);
+         Nega= new JButton("Negative");
+        Nega.addActionListener(this);
 
-        frame1.add(Pic);
+        frame1.add(Nega);
+        Gray= new JButton("GrayScale");
+        Gray.addActionListener(this);
+
+        frame1.add(Gray);
 
         frame1.setVisible(true);
     }
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==Pic){
-            this.ImageSelect();
-            frame1.setVisible(false);
+        if(e.getSource()==Nega){
+            BufferedImage imNew=this.ImageSelect();
+            this.FindNegative(imNew);
 
+
+        }
+        else {
+
+            BufferedImage imNew=this.ImageSelect();
+            this.FindGray(imNew);
+            frame1.setVisible(false);
         }
 
 
@@ -58,42 +72,33 @@ public class Interface1 extends JFrame implements ActionListener  {
     }
 
 
-    private void ImageSelect(){
+    public void FindNegative(BufferedImage imNew){
+        Negative n= new Negative();
+        BufferedImage img3=n.ConvertNegative(imNew);
+        this.display(img3);
+
+
+    }
+    public void FindGray(BufferedImage ImNew){
+        GrayScale g= new GrayScale();
+        BufferedImage img2=g.ConvertGrayScale(ImNew);
+        this.display(img2);
+    }
+
+
+
+    private BufferedImage ImageSelect(){
         final JFileChooser fc=new JFileChooser();
         int returnVal= fc.showOpenDialog(this);
         if(returnVal==JFileChooser.APPROVE_OPTION)
             f= fc.getSelectedFile();
         try{
             im= ImageIO.read(new File(f.getAbsolutePath()));
-            BufferedImage im5=im;
-            BufferedImage im6=im;
-
-           /* JButton jNeg=new JButton("Negative");
-            add(jNeg);
-            jNeg.setVisible(true);
-            jNeg.addActionListener(this);
-            JButton jGrey=new JButton("GreyScale");
-            add(jGrey);
-            jGrey.setVisible(true);
-            jGrey.addActionListener(this);
-            jb.setVisible(true);
-            fc.setVisible(true);
-            frame2.setVisible(true);
-            GrayScale g= new GrayScale();
-            BufferedImage img2=g.ConvertGrayScale(im5);
-            this.display(img2);
-            this.display(im);*/
-            Negative n= new Negative();
-            BufferedImage img3=n.ConvertNegative(im6);
-            this.display(img3);
-
-
-
-
         }
         catch(IOException ie){
             ie.getStackTrace();
         }
+        return im;
     }
     protected BufferedImage getImage(){
         return im;
